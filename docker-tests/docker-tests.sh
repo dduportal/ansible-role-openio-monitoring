@@ -150,6 +150,8 @@ exec_container() {
 
 run_syntax_check() {
   log 'Running syntax check on playbook'
+  exec_container mkdir /etc/ansible/vars
+  exec_container touch /etc/ansible/vars/sds.yml
   exec_container ansible-playbook "${test_playbook}" --syntax-check
   log 'Syntax check finished'
 }
@@ -163,6 +165,8 @@ run_test_playbook() {
 run_galaxy_install() {
   log "Running ansible-galaxy install"
   exec_container ansible-galaxy install -r "${requirements}"
+  exec_container /bin/bash -c "${role_dir}/docker-tests/yq r ${role_dir}/meta/main.yml dependencies > /tmp/requirements.yml"
+  exec_container ansible-galaxy install -r /tmp/requirements.yml
   log "Requirements installed"
 }
 

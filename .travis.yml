@@ -18,10 +18,6 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install --only-upgrade git
-  - |
-    for i in docker-tests.sh functional-tests.sh ansible.cfg; do
-      wget -O docker-tests/${i} https://raw.githubusercontent.com/open-io/ansible-role-openio-skeleton/docker-tests/${i}
-    done
   - sudo pip install --upgrade pip
   - sudo pip install ansible-lint yamllint
 

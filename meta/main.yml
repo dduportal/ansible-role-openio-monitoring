@@ -21,41 +21,41 @@ galaxy_info:
 dependencies:
   - name: oio-exporter
     src: https://github.com/open-io/ansible-role-openio-oio-exporter.git
-    version: 20.04
+    version: "20.04"
 
   - name: netdata
     src: https://github.com/open-io/ansible-role-openio-netdata.git
-    version: 20.04
+    version: "20.04"
 
   - name: prometheus
     src: https://github.com/open-io/ansible-role-openio-prometheus.git
-    version: 20.04
+    version: "20.04"
 
   - name: alertmanager
     src: https://github.com/open-io/ansible-role-openio-alertmanager.git
-    version: 20.04
+    version: "20.04"
 
   - name: grafana
     src: https://github.com/open-io/ansible-role-openio-grafana.git
-    version: 20.04
+    version: "20.04"
 
   - name: elasticsearch
     src: https://github.com/open-io/ansible-role-openio-elasticsearch.git
-    version: 20.04
+    version: "20.04"
 
   - name: kibana
     src: https://github.com/open-io/ansible-role-openio-kibana.git
-    version: 20.04
+    version: "20.04"
 
   - name: filebeat
     src: https://github.com/open-io/ansible-role-openio-filebeat.git
-    version: 20.04
+    version: "20.04"
 
-  - name: loki
-    src: https://github.com/open-io/ansible-role-openio-loki.git
-    version: 20.04
+#  - name: loki
+#    src: https://github.com/open-io/ansible-role-openio-loki.git
+#    version: "20.04"
 
-  - name: promtail
-    src: https://github.com/open-io/ansible-role-openio-promtail.git
-    version: 20.04
+#  - name: promtail
+#    src: https://github.com/open-io/ansible-role-openio-promtail.git
+#    version: "20.04"
 ...

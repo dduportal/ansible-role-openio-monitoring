@@ -3,6 +3,13 @@
   become: true
   vars:
     namespace: TRAVIS
+    openio_elasticsearch_memory: 128M
+    openio_elasticsearch_sysctl: |
+      {% if ansible_os_family == "RedHat" %}
+      {{   [ { "name": "vm.max_map_count", "value": 262144 } ] }}
+      {% else %}
+      {{   [] }}
+      {% endif %}
   tasks:
 
     - include_role:
@@ -17,14 +24,5 @@
     - include_role:
         name: gridinit
 
-    - name: "Import monitoring"
-      import_playbook: roles/monitoring/playbooks/main.yml
-      vars:
-        openio_elasticsearch_memory: 128M
-        openio_elasticsearch_sysctl: |
-          {% if ansible_os_family == "RedHat" %}
-          {{   [ { "name": "vm.max_map_count", "value": 262144 } ] }}
-          {% else %}
-          {{   [] }}
-          {% endif %}
+- import_playbook: ../playbooks/main.yml
 ...
