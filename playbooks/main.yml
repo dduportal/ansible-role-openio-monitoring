@@ -116,105 +116,96 @@
         name: alertmanager
 
 #
-# EFK STACK
+# ELASTICSEARCH
 #
-- block:
-    #
-    # ELASTICSEARCH
-    #
-    - name: "Monitoring: elasticsearch"
-      any_errors_fatal: "{{ openio_any_errors_fatal }}"
-      become: true
-      environment: "{{ openio_environment }}"
-      hosts: elasticsearch
-      vars_files:
-        - ../../../vars/sds.yml
-      tags:
-        - monitoring
-        - elasticsearch
+- name: "Monitoring: elasticsearch"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: elasticsearch
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - elasticsearch
 
-      tasks:
-        - include_role:
-            name: elasticsearch
-
-    #
-    # KIBANA
-    #
-    - name: "Monitoring: kibana"
-      any_errors_fatal: "{{ openio_any_errors_fatal }}"
-      become: true
-      environment: "{{ openio_environment }}"
-      hosts: kibana
-      vars_files:
-        - ../../../vars/sds.yml
-      tags:
-        - monitoring
-        - kibana
-
-      tasks:
-        - include_role:
-            name: kibana
-
-    #
-    # FILEBEAT
-    #
-    - name: "Monitoring: filebeat"
-      any_errors_fatal: "{{ openio_any_errors_fatal }}"
-      become: true
-      environment: "{{ openio_environment }}"
-      hosts: filebeat
-      vars_files:
-        - ../../../vars/sds.yml
-      tags:
-        - monitoring
-        - filebeat
-      tasks:
-        - include_role:
-            name: filebeat
-
-  # end of efk block
-  when: openio_efk | d(false) | bool
+  tasks:
+    - include_role:
+        name: elasticsearch
+      when: openio_efk | d(false) | bool
 
 #
-# LOKI/PROMTAIL stack
+# KIBANA
 #
-- block:
-    #
-    # LOKI
-    #
-    - name: "Monitoring: loki"
-      any_errors_fatal: "{{ openio_any_errors_fatal }}"
-      become: true
-      environment: "{{ openio_environment }}"
-      hosts: loki
-      vars_files:
-        - ../../../vars/sds.yml
-      tags:
-        - monitoring
-        - loki
+- name: "Monitoring: kibana"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: kibana
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - kibana
 
-      tasks:
-        - include_role:
-            name: loki
+  tasks:
+    - include_role:
+        name: kibana
+      when: openio_efk | d(false) | bool
 
-    #
-    # promtail
-    #
-    - name: "Monitoring: promtail"
-      any_errors_fatal: "{{ openio_any_errors_fatal }}"
-      become: true
-      environment: "{{ openio_environment }}"
-      hosts: promtail
-      vars_files:
-        - ../../../vars/sds.yml
-      tags:
-        - monitoring
-        - promtail
+#
+# FILEBEAT
+#
+- name: "Monitoring: filebeat"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: filebeat
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - filebeat
+  tasks:
+    - include_role:
+        name: filebeat
+      when: openio_efk | d(false) | bool
 
-      tasks:
-        - include_role:
-            name: promtail
+#
+# LOKI
+#
+- name: "Monitoring: loki"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: loki
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - loki
 
-  # end of loki block
-  when: openio_loki | d(false) | bool
+  tasks:
+    - include_role:
+        name: loki
+      when: openio_loki | d(false) | bool
+
+#
+# promtail
+#
+- name: "Monitoring: promtail"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: promtail
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - promtail
+
+  tasks:
+    - include_role:
+        name: promtail
+      when: openio_loki | d(false) | bool
 ...
