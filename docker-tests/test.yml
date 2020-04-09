@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: true
+  vars:
+    namespace: TRAVIS
+  tasks:
+
+    - include_role:
+        name: users
+
+    - include_role:
+        name: repository
+      vars:
+        openio_repository_no_log: false
+        openio_repository_mirror_host: mirror2.openio.io
+
+    - include_role:
+        name: gridinit
+
+    - name: "Import monitoring"
+      import_playbook: roles/monitoring/playbooks/main.yml
+      vars:
+        openio_elasticsearch_memory: 128M
+        openio_elasticsearch_sysctl: |
+          {% if ansible_os_family == "RedHat" %}
+          {{   [ { "name": "vm.max_map_count", "value": 262144 } ] }}
+          {% else %}
+          {{   [] }}
+          {% endif %}
+...

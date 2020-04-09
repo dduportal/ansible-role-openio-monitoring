@@ -1,0 +1,220 @@
+---
+# - name: "Prepare monitoring"
+#   hosts: localhost
+#   any_errors_fatal: true
+#   vars_files:
+#     - ../../../vars/sds.yml
+#   tags:
+#     - monitoring
+#     - netdata
+#     - oio_exporter
+#     - oio-exporter
+#     - exporter
+#     - prometheus
+#     - alertmanager
+#     - grafana
+#     - elasticsearch
+#     - kibana
+#     - filebeat
+#     - loki
+#     - promtail
+#   tasks:
+#    - add_host:
+#        name: node0
+#        groups: loki
+
+#
+# NETDATA
+#
+- name: "Monitoring: netdata"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: netdata
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - netdata
+
+  tasks:
+    - include_role:
+        name: netdata
+
+#
+# OIO-EXPORTER
+#
+- name: "Monitoring: oio-exporter"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: oio_exporter
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - exporter
+    - oio_exporter
+    - oio-exporter
+
+  tasks:
+    - include_role:
+        name: oio-exporter
+
+#
+# PROMETHEUS
+#
+- name: "Monitoring: prometheus"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: prometheus
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - prometheus
+
+  tasks:
+    - include_role:
+        name: prometheus
+
+#
+# GRAFANA
+#
+- name: "Monitoring: grafana"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: grafana
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - grafana
+
+  tasks:
+    - include_role:
+        name: grafana
+
+#
+# ALERTMANAGER
+#
+- name: "Monitoring: alertmanager"
+  any_errors_fatal: "{{ openio_any_errors_fatal }}"
+  become: true
+  environment: "{{ openio_environment }}"
+  hosts: alertmanager
+  vars_files:
+    - ../../../vars/sds.yml
+  tags:
+    - monitoring
+    - alertmanager
+
+  tasks:
+    - include_role:
+        name: alertmanager
+
+#
+# EFK STACK
+#
+- block:
+    #
+    # ELASTICSEARCH
+    #
+    - name: "Monitoring: elasticsearch"
+      any_errors_fatal: "{{ openio_any_errors_fatal }}"
+      become: true
+      environment: "{{ openio_environment }}"
+      hosts: elasticsearch
+      vars_files:
+        - ../../../vars/sds.yml
+      tags:
+        - monitoring
+        - elasticsearch
+
+      tasks:
+        - include_role:
+            name: elasticsearch
+
+    #
+    # KIBANA
+    #
+    - name: "Monitoring: kibana"
+      any_errors_fatal: "{{ openio_any_errors_fatal }}"
+      become: true
+      environment: "{{ openio_environment }}"
+      hosts: kibana
+      vars_files:
+        - ../../../vars/sds.yml
+      tags:
+        - monitoring
+        - kibana
+
+      tasks:
+        - include_role:
+            name: kibana
+
+    #
+    # FILEBEAT
+    #
+    - name: "Monitoring: filebeat"
+      any_errors_fatal: "{{ openio_any_errors_fatal }}"
+      become: true
+      environment: "{{ openio_environment }}"
+      hosts: filebeat
+      vars_files:
+        - ../../../vars/sds.yml
+      tags:
+        - monitoring
+        - filebeat
+      tasks:
+        - include_role:
+            name: filebeat
+
+  # end of efk block
+  when: openio_efk | d(false) | bool
+
+#
+# LOKI/PROMTAIL stack
+#
+- block:
+    #
+    # LOKI
+    #
+    - name: "Monitoring: loki"
+      any_errors_fatal: "{{ openio_any_errors_fatal }}"
+      become: true
+      environment: "{{ openio_environment }}"
+      hosts: loki
+      vars_files:
+        - ../../../vars/sds.yml
+      tags:
+        - monitoring
+        - loki
+
+      tasks:
+        - include_role:
+            name: loki
+
+    #
+    # promtail
+    #
+    - name: "Monitoring: promtail"
+      any_errors_fatal: "{{ openio_any_errors_fatal }}"
+      become: true
+      environment: "{{ openio_environment }}"
+      hosts: promtail
+      vars_files:
+        - ../../../vars/sds.yml
+      tags:
+        - monitoring
+        - promtail
+
+      tasks:
+        - include_role:
+            name: promtail
+
+  # end of loki block
+  when: openio_loki | d(false) | bool
+...
