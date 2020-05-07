@@ -51,11 +51,11 @@ dependencies:
     src: https://github.com/open-io/ansible-role-openio-filebeat.git
     version: "20.04"
 
-#  - name: loki
-#    src: https://github.com/open-io/ansible-role-openio-loki.git
-#    version: "20.04"
+  - name: loki
+    src: https://github.com/open-io/ansible-role-openio-loki.git
+    version: "20.04"
 
-#  - name: promtail
-#    src: https://github.com/open-io/ansible-role-openio-promtail.git
-#    version: "20.04"
+  - name: promtail
+    src: https://github.com/open-io/ansible-role-openio-promtail.git
+    version: "20.04"
 ...
